@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #define getcx getchar_unlocked
 
@@ -279,6 +280,8 @@ letter_t **read(int *size, unsigned int *csum) {
 
 int main() {
 
+    clock_t start = clock();
+
     int size = 0;
     int csum = 0;
 
@@ -298,6 +301,13 @@ int main() {
         letter = letter->parent;
     }
     printf("%c%c%i", array[0]->character, 10, csum);
+
+    // TEN FRAGMENT POZNIEJ USUN!!
+
+    clock_t end = clock();
+
+    printf("\n%f",end-start);
+
 
     return 0;
 }
