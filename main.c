@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 
 #define getcx getchar_unlocked
 
@@ -19,54 +18,6 @@ typedef struct letter {
     int csum;
 
 } letter_t;
-
-// leaves struct
-
-typedef struct leaf {
-
-    letter_t *letter;
-
-    struct leaf_t *next;
-
-} leaf_t;
-
-// leaves operands
-
-letter_t *pop(leaf_t *first) {
-
-    leaf_t *current = first;
-    leaf_t *before = current;
-
-    while (current->next != NULL) {
-        before = current;
-        current = current->next;
-    }
-
-
-    letter_t *leaf_letter = current->letter;
-
-    before->next = NULL;
-
-    return leaf_letter;
-
-}
-
-void push(leaf_t *first, letter_t *insert) {
-
-    leaf_t *current = first;
-
-    while (current->next != NULL) {
-        current = current->next;
-    }
-
-    leaf_t *leaf = malloc(sizeof(leaf_t));
-    leaf->next = NULL;
-    leaf->letter = insert;
-    current->next = leaf;
-
-
-}
-
 
 letter_t **cs_by_level(letter_t **array, size_t size, unsigned int max) {
 
@@ -161,6 +112,7 @@ void findParent(letter_t **array, unsigned int level, unsigned int level_marker,
 
 
 void setNewMaxLetter(letter_t *const *array, letter_t **max_p, letter_t *letter) {
+
     letter_t *max = max_p[0];
     letter_t *parent1 = letter->parent;
     letter_t *parent2 = max->parent;
@@ -239,9 +191,6 @@ letter_t **read(int *size, unsigned int *csum) {
     char *line;
     int read;
 
-    leaf_t *head = malloc(sizeof(leaf_t));
-    head->next = NULL;
-
     while ((read = getcx()) != EOF) {
         line = calloc(66, sizeof(char));
         i = 0;
@@ -259,33 +208,20 @@ letter_t **read(int *size, unsigned int *csum) {
         letter->level = level;
 
         *csum = *csum + level + 1;
-
-//        push(head, letter);
         letters[counter] = letter;
         counter++;
     }
 
-
-    letter_t **array = calloc(counter, sizeof(letter_t *));
-
     *size = counter;
 
-//    for (int l = 0; l < counter; l++) {
-//        array[l] = pop(head);
-//    }
-
     return letters;
-//    return array;
 }
 
 
 int main() {
 
-    clock_t t;
-    t = clock();
     int size = 0;
     int csum = 0;
-
 
     letter_t **array = read(&size, &csum);
     array = cs_by_level(array, size, findMaxLevel(array, size));
@@ -302,11 +238,9 @@ int main() {
         printf("%c", letter->character);
         letter = letter->parent;
     }
-    printf("%c%c%i", array[0]->character, 10, csum);
-    t = clock() - t;
-    double time_taken = (double) t/CLOCKS_PER_SEC;
 
-    printf("\nTIME ELAPSED: %lf\n",time_taken);
+    printf("%c%c%i", array[0]->character, 10, csum);
+
 
     return 0;
 }
