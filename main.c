@@ -101,6 +101,7 @@ unsigned int lr_sort(letter_t **array, unsigned int level, unsigned int level_ma
 }
 
 void findParent(letter_t **array, unsigned int level, unsigned int level_marker, unsigned int n, unsigned int border) {
+
     if (level_marker + 1 != border) {
         array[level_marker + 1]->parent = array[level_marker];
     }
@@ -158,7 +159,7 @@ void setNewMaxLetter(letter_t *const *array, letter_t **max_p, letter_t *letter)
     }
 }
 
-
+// change to bucket sort (?)
 void process(letter_t **array, unsigned int level, unsigned int level_marker, unsigned int n, letter_t **max_p) {
     if (n - level_marker == 0) {
         return;
