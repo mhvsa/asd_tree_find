@@ -234,7 +234,7 @@ letter_t **read(int *size, unsigned int *csum) {
 
 
     int i, level;
-
+    letter_t **letters = calloc(10000000, sizeof(letter_t *));
     int counter = 0;
     char *line;
     int read;
@@ -260,8 +260,8 @@ letter_t **read(int *size, unsigned int *csum) {
 
         *csum = *csum + level + 1;
 
-        push(head, letter);
-
+//        push(head, letter);
+        letters[counter] = letter;
         counter++;
     }
 
@@ -270,25 +270,27 @@ letter_t **read(int *size, unsigned int *csum) {
 
     *size = counter;
 
-    for (int l = 0; l < counter; l++) {
-        array[l] = pop(head);
-    }
+//    for (int l = 0; l < counter; l++) {
+//        array[l] = pop(head);
+//    }
 
-    return array;
+    return letters;
+//    return array;
 }
 
 
 int main() {
 
-    clock_t start = clock();
-
+    clock_t t;
+    t = clock();
     int size = 0;
     int csum = 0;
+
 
     letter_t **array = read(&size, &csum);
     array = cs_by_level(array, size, findMaxLevel(array, size));
 
-    letter_t *max = malloc(sizeof(letter_t));
+    letter_t *max = malloc(sizeof(letter_t *));
     max->character = 0;
     letter_t *max_p[1] = {max};
 
@@ -301,13 +303,10 @@ int main() {
         letter = letter->parent;
     }
     printf("%c%c%i", array[0]->character, 10, csum);
+    t = clock() - t;
+    double time_taken = (double) t/CLOCKS_PER_SEC;
 
-    // TEN FRAGMENT POZNIEJ USUN!!
-
-    clock_t end = clock();
-
-    printf("\n%f",end-start);
-
+    printf("\nTIME ELAPSED: %lf\n",time_taken);
 
     return 0;
 }
